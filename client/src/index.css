@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-background: #FBEFEF;
+    --color-surface: #FFFFFF;
+    --color-secondary-surface: #FFE2E2;
+    --color-primary: #F5CBCB;
+    --color-ai: #C5B3D3;
+    --color-text: #332F35;
+    --color-muted: #625B64;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: #FBEFEF;
+    color: #332F35;
+  }
+}
+
+/* Palette Utility Classes */
+.bg-blush {
+  background-color: #FBEFEF !important;
+}
+
+.bg-light-pink {
+  background-color: #FFE2E2 !important;
+}
+
+.bg-rose-pink {
+  background-color: #F5CBCB !important;
+}
+
+.bg-lavender {
+  background-color: #C5B3D3 !important;
+}
+
+.text-dark {
+  color: #332F35 !important;
+}
+
+.text-muted {
+  color: #625B64 !important;
+}
+
+.border-rose {
+  border-color: #F5CBCB !important;
+}
+
+.border-lavender {
+  border-color: #C5B3D3 !important;
+}
+
+/* Custom Button Component Classes */
+.btn-primary {
+  background-color: #F5CBCB;
+  color: #332F35;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #C5B3D3;
+}
+
+.btn-ai {
+  background-color: #C5B3D3;
+  color: #332F35;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.btn-ai:hover {
+  background-color: #F5CBCB;
+}
+
+.btn-secondary {
+  background-color: #FFE2E2;
+  color: #332F35;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #F5CBCB;
+}
+
+/* Form inputs styling */
+.input-pastel {
+  background-color: #FBEFEF;
+  border: 1.5px solid #F5CBCB;
+  color: #332F35;
+  border-radius: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.8125rem;
+  transition: all 0.2s ease;
+}
+
+.input-pastel::placeholder {
+  color: #8A818A;
+}
+
+.input-pastel:focus {
+  border-color: #C5B3D3;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(197, 179, 211, 0.3);
+  background-color: #FFFFFF;
+}
+
+/* Print Styles for A4 Result Sheet */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #332F35 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .printable-area {
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm 12mm 15mm;
+  }
+}
