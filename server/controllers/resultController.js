@@ -19,6 +19,7 @@ export const getResults = async (req, res) => {
       session,
       grade,
       status,
+      studentId,
       sortBy = 'createdAt',
       order = 'desc',
     } = req.query;
@@ -32,6 +33,9 @@ export const getResults = async (req, res) => {
       if (session) query.session = session;
       if (grade) query.grade = grade;
       if (status) query.resultStatus = status;
+      if (studentId) {
+        query.$or = [{ studentId }, { 'studentDetails.rollNumber': studentId }];
+      }
 
       results = await Result.find(query).sort({ [sortBy]: order === 'asc' ? 1 : -1 });
     } else if (shouldUseFallback()) {
@@ -45,7 +49,7 @@ export const getResults = async (req, res) => {
 
     // Filter memory or secondary search
     let filtered = [...results];
-    if (search || className || section || session || grade || status) {
+    if (search || className || section || session || grade || status || studentId) {
       const q = (search || '').toLowerCase().trim();
       filtered = filtered.filter((r) => {
         const studentName = r.studentDetails?.name || r.studentName || '';
@@ -63,6 +67,10 @@ export const getResults = async (req, res) => {
         const matchesSession = !session || r.session === session;
         const matchesGrade = !grade || r.grade === grade;
         const matchesStatus = !status || r.resultStatus === status;
+        const matchesStudent =
+          !studentId ||
+          r.studentId === studentId ||
+          (r.studentDetails && (r.studentDetails.rollNumber === studentId || r.studentDetails.name === studentId));
 
         return (
           matchesSearch &&
@@ -70,7 +78,8 @@ export const getResults = async (req, res) => {
           matchesSection &&
           matchesSession &&
           matchesGrade &&
-          matchesStatus
+          matchesStatus &&
+          matchesStudent
         );
       });
     }

@@ -45,7 +45,7 @@ const ResultView = () => {
   if (loading) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-3">
-        <Loader2 className="h-8 w-8 text-indigo-600 animate-spin" />
+        <Loader2 className="h-8 w-8 text-[#00264D] animate-spin" />
         <p className="text-xs font-semibold text-slate-500">Loading Student Report Card...</p>
       </div>
     );
@@ -53,19 +53,19 @@ const ResultView = () => {
 
   if (error || !result) {
     return (
-      <div className="p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center space-y-4 max-w-md mx-auto my-12">
-        <div className="h-12 w-12 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-600 flex items-center justify-center mx-auto">
+      <div className="p-8 rounded-2xl bg-white border border-slate-200 text-center space-y-4 max-w-md mx-auto my-12 shadow-sm">
+        <div className="h-12 w-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border border-rose-200">
           <AlertCircle className="h-6 w-6" />
         </div>
-        <h3 className="font-heading font-bold text-lg text-slate-900 dark:text-white">
+        <h3 className="font-heading font-bold text-lg text-slate-900">
           Report Card Not Found
         </h3>
-        <p className="text-xs text-slate-500">{error || 'The requested result ID does not exist.'}</p>
+        <p className="text-xs text-slate-500">{error || 'The requested result record does not exist.'}</p>
         <button
           onClick={() => navigate('/results')}
-          className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold"
+          className="px-4 py-2 rounded-xl bg-[#00264D] hover:bg-[#FF7F00] text-white text-xs font-bold transition-all shadow-xs"
         >
-          Back to Result History
+          Back to Results
         </button>
       </div>
     );
@@ -76,10 +76,10 @@ const ResultView = () => {
       <div className="no-print">
         <button
           onClick={() => navigate('/results')}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold transition-colors"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors shadow-2xs"
         >
           <ArrowLeft className="h-4 w-4" />
-          <span>Back to Result History</span>
+          <span>Back to Results</span>
         </button>
       </div>
 

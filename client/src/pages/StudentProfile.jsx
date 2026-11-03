@@ -72,22 +72,22 @@ const StudentProfile = () => {
       </button>
 
       {/* STUDENT PROFILE HEADER CARD */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="p-6 sm:p-8 rounded-3xl bg-[#00264D] border border-[#001D3D] text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="flex items-center gap-5">
-          <div className="h-16 w-16 rounded-2xl bg-indigo-600 text-white font-extrabold text-2xl flex items-center justify-center shadow-lg shadow-indigo-600/30">
+          <div className="h-16 w-16 rounded-2xl bg-[#FF7F00] text-white font-extrabold text-2xl flex items-center justify-center shadow-lg shadow-[#FF7F00]/30 border-2 border-white/20">
             {student.name.charAt(0)}
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="font-heading font-extrabold text-2xl tracking-tight">{student.name}</h1>
-              <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-bold uppercase">
+              <h1 className="font-heading font-extrabold text-2xl tracking-tight text-white">{student.name}</h1>
+              <span className="px-2.5 py-0.5 rounded-full bg-white/15 text-[#FF7F00] text-[10px] font-bold uppercase">
                 {student.gender}
               </span>
             </div>
             <p className="text-xs text-slate-300 mt-1">
               Roll No: <strong className="text-white">{student.rollNumber}</strong> • Admission: <strong className="text-white">{student.admissionNumber}</strong>
             </p>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-300 mt-0.5">
               Class: {student.class} ({student.section}) • Session {student.session}
             </p>
           </div>
@@ -95,7 +95,7 @@ const StudentProfile = () => {
 
         <button
           onClick={() => navigate(`/marks-entry?studentId=${student.studentId || student._id}`)}
-          className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-md shadow-indigo-600/30 transition-all"
+          className="px-4 py-2.5 rounded-xl bg-[#FF7F00] hover:bg-[#E06D00] text-white font-bold text-xs shadow-md shadow-[#FF7F00]/30 transition-all"
         >
           Enter Marks / Generate Result
         </button>
@@ -104,9 +104,9 @@ const StudentProfile = () => {
       {/* DETAILS & TREND GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Personal & Parent Info */}
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-          <h3 className="font-heading font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
-            <User className="h-4 w-4 text-indigo-600" />
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <h3 className="font-heading font-bold text-base text-slate-900 flex items-center gap-2">
+            <User className="h-4 w-4 text-[#00264D]" />
             <span>Personal & Parent Details</span>
           </h3>
 

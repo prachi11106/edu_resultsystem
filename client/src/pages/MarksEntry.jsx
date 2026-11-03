@@ -194,20 +194,20 @@ const MarksEntry = () => {
       {/* PAGE TITLE */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-heading font-extrabold text-2xl text-slate-900 dark:text-white flex items-center gap-2">
-            <FileEdit className="h-6 w-6 text-indigo-600" />
+          <h1 className="font-heading font-extrabold text-2xl text-slate-900 flex items-center gap-2">
+            <FileEdit className="h-6 w-6 text-[#00264D]" />
             <span>Marks & Subject Entry System</span>
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             Enter marks, dynamically configure subjects, and review real-time score calculations.
           </p>
         </div>
 
         <button
           onClick={handleProceedToAnalysis}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-xs shadow-md shadow-indigo-500/20 transition-all"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#00264D] hover:bg-[#FF7F00] text-white font-bold text-xs shadow-md shadow-[#00264D]/15 transition-all"
         >
-          <Sparkles className="h-4 w-4" />
+          <Sparkles className="h-4 w-4 text-[#FF7F00]" />
           <span>Analyze & Generate Result →</span>
         </button>
       </div>
@@ -220,21 +220,21 @@ const MarksEntry = () => {
       )}
 
       {/* STUDENT SELECTION CARD */}
-      <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-        <h3 className="font-heading font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
-          <User className="h-4 w-4 text-indigo-500" />
+      <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-4">
+        <h3 className="font-heading font-bold text-base text-slate-900 flex items-center gap-2">
+          <User className="h-4 w-4 text-[#00264D]" />
           <span>Student & Academic Session</span>
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               Select Student *
             </label>
             <select
               value={selectedStudentId}
               onChange={(e) => handleStudentSelect(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-[#FF7F00] focus:ring-2 focus:ring-[#FF7F00]/20 transition-all outline-none"
             >
               {students.map((st) => (
                 <option key={st._id || st.studentId} value={st.studentId || st._id}>
@@ -245,13 +245,13 @@ const MarksEntry = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               Academic Session
             </label>
             <select
               value={session}
               onChange={(e) => setSession(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
+              className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-[#FF7F00] transition-all outline-none"
             >
               <option value="2025-26">2025-26</option>
               <option value="2024-25">2024-25</option>
@@ -259,42 +259,42 @@ const MarksEntry = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               Class
             </label>
             <input
               type="text"
               value={className}
               onChange={(e) => setClassName(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
+              className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-[#FF7F00] transition-all outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               Section
             </label>
             <input
               type="text"
               value={section}
               onChange={(e) => setSection(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
+              className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:border-[#FF7F00] transition-all outline-none"
             />
           </div>
         </div>
       </div>
 
       {/* DYNAMIC MARKS ENTRY TABLE */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-          <h3 className="font-heading font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
-            <Calculator className="h-4 w-4 text-indigo-500" />
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+          <h3 className="font-heading font-bold text-base text-slate-900 flex items-center gap-2">
+            <Calculator className="h-4 w-4 text-[#00264D]" />
             <span>Subject Marks Entry</span>
           </h3>
 
           <button
             onClick={addSubjectRow}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-slate-800 hover:bg-indigo-100 text-indigo-700 dark:text-indigo-300 text-xs font-semibold transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#EBF2FA] hover:bg-[#00264D] hover:text-white text-[#00264D] text-xs font-bold transition-all"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>Add Subject</span>
@@ -304,7 +304,7 @@ const MarksEntry = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
+              <tr className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
                 <th className="p-4">Subject Name</th>
                 <th className="p-4 text-center">Max Marks</th>
                 <th className="p-4 text-center">Obtained Marks</th>
@@ -314,16 +314,16 @@ const MarksEntry = () => {
                 <th className="p-4 text-right">Remove</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+            <tbody className="divide-y divide-slate-100">
               {processedSubjects.map((sub, idx) => (
-                <tr key={idx} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50">
+                <tr key={idx} className="hover:bg-slate-50/80">
                   <td className="p-3">
                     <input
                       type="text"
                       value={sub.subjectName}
                       onChange={(e) => handleSubjectChange(idx, 'subjectName', e.target.value)}
                       placeholder="Subject Name"
-                      className="w-full px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-semibold text-slate-900 dark:text-white"
+                      className="w-full px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 font-semibold text-slate-900 focus:bg-white focus:border-[#FF7F00] outline-none"
                     />
                   </td>
                   <td className="p-3 text-center">
@@ -331,7 +331,7 @@ const MarksEntry = () => {
                       type="number"
                       value={sub.maximumMarks}
                       onChange={(e) => handleSubjectChange(idx, 'maximumMarks', e.target.value)}
-                      className="w-20 px-2 py-1.5 text-center rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-medium text-slate-900 dark:text-white"
+                      className="w-20 px-2 py-1.5 text-center rounded-lg bg-slate-50 border border-slate-200 font-medium text-slate-900 focus:bg-white focus:border-[#FF7F00] outline-none"
                     />
                   </td>
                   <td className="p-3 text-center">
@@ -339,23 +339,23 @@ const MarksEntry = () => {
                       type="number"
                       value={sub.obtainedMarks}
                       onChange={(e) => handleSubjectChange(idx, 'obtainedMarks', e.target.value)}
-                      className="w-24 px-2 py-1.5 text-center rounded-lg bg-indigo-50 dark:bg-slate-800 border border-indigo-200 dark:border-slate-700 font-bold text-indigo-900 dark:text-indigo-300"
+                      className="w-24 px-2 py-1.5 text-center rounded-lg bg-slate-50 border border-slate-200 font-bold text-[#00264D] focus:bg-white focus:border-[#FF7F00] outline-none"
                     />
                   </td>
-                  <td className="p-3 text-center font-semibold text-slate-700 dark:text-slate-300">
+                  <td className="p-3 text-center font-bold text-slate-800">
                     {sub.percentage}%
                   </td>
                   <td className="p-3 text-center">
-                    <span className="inline-block px-2.5 py-0.5 rounded font-bold bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">
+                    <span className="inline-block px-2.5 py-0.5 rounded font-bold bg-[#FF7F00]/15 text-[#FF7F00]">
                       {sub.grade}
                     </span>
                   </td>
                   <td className="p-3 text-center">
                     <span
-                      className={`inline-block px-2.5 py-0.5 rounded text-[10px] font-extrabold uppercase ${
+                      className={`inline-block px-2.5 py-0.5 rounded text-[10px] font-bold uppercase ${
                         sub.status === 'PASS'
-                          ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300'
-                          : 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300'
+                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                          : 'bg-rose-50 text-rose-700 border border-rose-200'
                       }`}
                     >
                       {sub.status}
@@ -364,7 +364,7 @@ const MarksEntry = () => {
                   <td className="p-3 text-right">
                     <button
                       onClick={() => removeSubjectRow(idx)}
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-slate-800"
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -414,9 +414,9 @@ const MarksEntry = () => {
               <div>
                 <span className="text-slate-400">Grade & Status:</span>
                 <div className="flex items-center gap-1.5 mt-0.5">
-                  <span className="font-bold text-indigo-300">{overallGrade}</span>
+                  <span className="font-bold text-[#FF7F00]">{overallGrade}</span>
                   <span
-                    className={`px-2 py-0.5 rounded text-[10px] font-extrabold ${
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                       resultStatus === 'PASS' ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'
                     }`}
                   >
@@ -430,15 +430,15 @@ const MarksEntry = () => {
           <div className="pt-3 border-t border-slate-800 space-y-2">
             <button
               onClick={handleProceedToAnalysis}
-              className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-400 hover:to-purple-400 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2"
+              className="w-full py-2.5 px-4 rounded-xl bg-[#FF7F00] hover:bg-[#E06D00] text-white font-bold text-xs shadow-md shadow-[#FF7F00]/25 transition-all flex items-center justify-center gap-2"
             >
-              <Sparkles className="h-4 w-4 text-amber-300" />
+              <Sparkles className="h-4 w-4 text-white" />
               <span>Proceed to AI Analysis</span>
             </button>
             <button
               onClick={handleDirectSave}
               disabled={saving}
-              className="w-full py-2 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition-colors"
+              className="w-full py-2 px-4 rounded-xl bg-[#00264D] hover:bg-[#001D3D] text-white font-bold text-xs border border-white/10 transition-colors"
             >
               {saving ? 'Generating Report...' : 'Save & Print Result Card'}
             </button>

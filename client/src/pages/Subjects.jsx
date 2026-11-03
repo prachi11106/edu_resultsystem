@@ -69,29 +69,29 @@ const Subjects = () => {
     <div className="space-y-6 pb-12">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-heading font-extrabold text-2xl text-slate-900 dark:text-white flex items-center gap-2">
-            <BookOpen className="h-6 w-6 text-indigo-600" />
+          <h1 className="font-heading font-extrabold text-2xl text-slate-900 flex items-center gap-2">
+            <BookOpen className="h-6 w-6 text-[#00264D]" />
             <span>Curriculum Subjects Management</span>
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 mt-1">
             Manage subject templates, default maximum marks, and pass thresholds.
           </p>
         </div>
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-md"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#00264D] hover:bg-[#FF7F00] text-white font-bold text-xs shadow-md shadow-[#00264D]/15 transition-all"
         >
           <Plus className="h-4 w-4" />
           <span>Add Subject Template</span>
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
+              <tr className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
                 <th className="p-4">Subject Name</th>
                 <th className="p-4">Class</th>
                 <th className="p-4">Category</th>
@@ -100,17 +100,17 @@ const Subjects = () => {
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+            <tbody className="divide-y divide-slate-100">
               {subjects.map((sub) => (
-                <tr key={sub._id || sub.subjectId} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50">
-                  <td className="p-4 font-bold text-slate-900 dark:text-white">{sub.subjectName}</td>
-                  <td className="p-4 text-slate-600 dark:text-slate-400">{sub.class}</td>
+                <tr key={sub._id || sub.subjectId} className="hover:bg-slate-50/80">
+                  <td className="p-4 font-bold text-slate-900">{sub.subjectName}</td>
+                  <td className="p-4 text-slate-600 font-medium">{sub.class}</td>
                   <td className="p-4">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 dark:bg-slate-800 dark:text-indigo-300">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#00264D]/10 text-[#00264D]">
                       {sub.category || 'Core'}
                     </span>
                   </td>
-                  <td className="p-4 text-center font-bold text-slate-900 dark:text-white">{sub.maximumMarks}</td>
+                  <td className="p-4 text-center font-bold text-slate-900">{sub.maximumMarks}</td>
                   <td className="p-4 text-center font-bold text-emerald-600">{sub.passMarks}</td>
                   <td className="p-4 text-right">
                     <button
@@ -189,7 +189,7 @@ const Subjects = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-3 py-1.5 text-xs font-semibold rounded-xl bg-indigo-600 text-white shadow-sm"
+                  className="px-4 py-2 text-xs font-bold rounded-xl bg-[#00264D] hover:bg-[#FF7F00] text-white shadow-sm transition-all"
                 >
                   Save Subject
                 </button>

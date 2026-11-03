@@ -2,16 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Users,
-  FileCheck2,
   TrendingUp,
   Award,
   AlertCircle,
-  PlusCircle,
-  FileEdit,
-  Sparkles,
-  History,
   ArrowRight,
   Eye,
+  GraduationCap,
 } from 'lucide-react';
 import {
   BarChart,
@@ -30,7 +26,6 @@ import { analyticsAPI } from '../services/api';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState(null);
 
   useEffect(() => {
@@ -38,7 +33,6 @@ const Dashboard = () => {
   }, []);
 
   const loadDashboard = async () => {
-    setLoading(true);
     try {
       const res = await analyticsAPI.getDashboard();
       if (res.success) {
@@ -46,8 +40,6 @@ const Dashboard = () => {
       }
     } catch (err) {
       console.warn('[Dashboard Load Error]', err);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -78,8 +70,8 @@ const Dashboard = () => {
   ];
 
   const passVsFail = [
-    { status: 'Passed (PASS)', count: kpis.totalResultsGenerated - kpis.needingImprovementCount, color: '#F5CBCB' },
-    { status: 'Needs Support (FAIL)', count: kpis.needingImprovementCount, color: '#C5B3D3' },
+    { status: 'Passed (PASS)', count: kpis.totalResultsGenerated - kpis.needingImprovementCount, color: '#00264D' },
+    { status: 'Needs Support (FAIL)', count: kpis.needingImprovementCount, color: '#FF7F00' },
   ];
 
   const recentResults = dashboardData?.recentResults || [];
@@ -88,35 +80,35 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-6 pb-12">
-      {/* HEADER BANNER (#C5B3D3) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#C5B3D3] p-6 sm:p-8 rounded-3xl text-[#332F35] shadow-sm border border-[#F5CBCB]">
-        <div>
-          <span className="inline-block px-3 py-1 rounded-full bg-[#F5CBCB] text-[#332F35] text-[10px] font-extrabold uppercase tracking-wider mb-2 border border-white">
-            ANKSETU • Teacher Overview
-          </span>
-          <h1 className="font-heading font-extrabold text-2xl sm:text-3xl tracking-tight text-[#332F35]">
-            Academic Performance Dashboard
-          </h1>
-          <p className="text-[#332F35]/80 text-xs sm:text-sm mt-1 max-w-xl font-semibold italic">
-            "Smart Results. Better Insights. Stronger Students."
-          </p>
-        </div>
+      {/* BRAND OVERVIEW BANNER */}
+      <div className="bg-[#00264D] p-6 sm:p-8 rounded-3xl text-white shadow-md relative overflow-hidden border border-[#001D3D]">
+        <div className="absolute -right-8 -bottom-8 w-64 h-64 bg-[#FF7F00]/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-[#FF7F00] text-[10px] font-bold uppercase tracking-wider border border-white/10">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#FF7F00] animate-pulse"></span>
+                ANKSETU • Academic Portal
+              </span>
+              <span className="hidden sm:inline-block text-xs text-slate-300">• Session 2025-26</span>
+            </div>
+            <h1 className="font-heading font-extrabold text-2xl sm:text-3xl tracking-tight text-white">
+              Academic Performance Dashboard
+            </h1>
+            <p className="text-slate-300 text-xs sm:text-sm mt-1 max-w-xl font-medium">
+              "Smart Results. Better Insights. Stronger Students."
+            </p>
+          </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigate('/marks-entry')}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#F5CBCB] hover:bg-white text-[#332F35] font-extrabold text-xs shadow-xs transition-all"
-          >
-            <PlusCircle className="h-4 w-4" />
-            <span>Enter Marks</span>
-          </button>
-          <button
-            onClick={() => navigate('/result-analysis')}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-[#F5CBCB] text-[#332F35] font-extrabold text-xs shadow-xs transition-all"
-          >
-            <Sparkles className="h-4 w-4 text-[#332F35]" />
-            <span>AI Hub</span>
-          </button>
+          <div className="hidden lg:flex items-center gap-4 text-right">
+            <div className="px-4 py-2.5 rounded-2xl bg-white/5 border border-white/10">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Class In-Charge</span>
+              <span className="text-xs font-bold text-white flex items-center gap-1 mt-0.5">
+                <GraduationCap className="h-3.5 w-3.5 text-[#FF7F00]" />
+                Class 10 (Section A)
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -149,64 +141,28 @@ const Dashboard = () => {
         <KPICard
           title="Needing Support"
           value={kpis.needingImprovementCount}
-          subtitle="Below pass threshold"
+          subtitle="Below pass threshold • Click to view"
           icon={AlertCircle}
           variant="ai"
-          trend={{ isPositive: false, text: 'AI Plan Needed' }}
+          trend={{ isPositive: false, text: 'Action Needed' }}
+          onClick={() => navigate('/needing-support')}
         />
       </div>
 
-      {/* QUICK ACTIONS ROW */}
-      <div className="p-4 rounded-2xl bg-[#FFE2E2] border border-[#F5CBCB] shadow-xs flex flex-wrap items-center justify-between gap-3">
-        <span className="text-xs font-extrabold uppercase tracking-wider text-[#332F35]">
-          Quick Workflows:
-        </span>
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => navigate('/students')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-[#F5CBCB] text-[#332F35] text-xs font-bold transition-colors shadow-2xs"
-          >
-            <Users className="h-3.5 w-3.5 text-[#625B64]" />
-            <span>Manage Students</span>
-          </button>
-          <button
-            onClick={() => navigate('/marks-entry')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-[#F5CBCB] text-[#332F35] text-xs font-bold transition-colors shadow-2xs"
-          >
-            <FileEdit className="h-3.5 w-3.5 text-[#625B64]" />
-            <span>Enter Marks</span>
-          </button>
-          <button
-            onClick={() => navigate('/result-analysis')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#C5B3D3] hover:bg-[#F5CBCB] text-[#332F35] text-xs font-extrabold transition-colors shadow-2xs"
-          >
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>AI Analysis</span>
-          </button>
-          <button
-            onClick={() => navigate('/results')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-[#F5CBCB] text-[#332F35] text-xs font-bold transition-colors shadow-2xs"
-          >
-            <History className="h-3.5 w-3.5 text-[#625B64]" />
-            <span>Result History</span>
-          </button>
-        </div>
-      </div>
-
-      {/* CHARTS SECTION USING PASTEL PALETTE (#F5CBCB primary, #C5B3D3 secondary, #FFE2E2 background) */}
+      {/* CHARTS SECTION USING ANKSETU LOGO PALETTE (#00264D Navy & #FF7F00 Orange) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Subject-Wise Performance Bar Chart */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-[#F5CBCB] shadow-xs space-y-4">
+        <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-heading font-extrabold text-base text-[#332F35]">
+              <h3 className="font-heading font-bold text-base text-slate-900">
                 Subject-Wise Performance Overview
               </h3>
-              <p className="text-xs text-[#625B64] font-medium">
+              <p className="text-xs text-slate-500 font-medium">
                 Average marks percentage across registered subjects
               </p>
             </div>
-            <span className="text-xs font-extrabold text-[#332F35] bg-[#F5CBCB] px-2.5 py-1 rounded-lg">
+            <span className="text-xs font-bold text-[#00264D] bg-[#EBF2FA] px-2.5 py-1 rounded-lg">
               Class 10
             </span>
           </div>
@@ -214,26 +170,26 @@ const Dashboard = () => {
           <div className="h-64 w-full pt-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={subjectData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#FFE2E2" />
-                <XAxis dataKey="subject" tick={{ fill: '#332F35', fontSize: 11, fontWeight: 700 }} axisLine={false} />
-                <YAxis domain={[0, 100]} tick={{ fill: '#625B64', fontSize: 11 }} axisLine={false} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+                <XAxis dataKey="subject" tick={{ fill: '#475569', fontSize: 11, fontWeight: 600 }} axisLine={false} />
+                <YAxis domain={[0, 100]} tick={{ fill: '#64748B', fontSize: 11 }} axisLine={false} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#F5CBCB', borderRadius: '12px', color: '#332F35' }}
+                  contentStyle={{ backgroundColor: '#00264D', borderColor: '#001D3D', borderRadius: '12px', color: '#FFFFFF' }}
                   formatter={(val) => [`${val}%`, 'Average Score']}
                 />
-                <Bar dataKey="averagePercentage" fill="#F5CBCB" radius={[8, 8, 0, 0]} barSize={36} />
+                <Bar dataKey="averagePercentage" fill="#00264D" radius={[8, 8, 0, 0]} barSize={36} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Pass vs Fail Ratio Pie Chart */}
-        <div className="bg-white p-6 rounded-2xl border border-[#F5CBCB] shadow-xs flex flex-col justify-between">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
           <div>
-            <h3 className="font-heading font-extrabold text-base text-[#332F35]">
+            <h3 className="font-heading font-bold text-base text-slate-900">
               Pass vs Fail Ratio
             </h3>
-            <p className="text-xs text-[#625B64] font-medium">
+            <p className="text-xs text-slate-500 font-medium">
               Overall student qualification
             </p>
 
@@ -246,7 +202,7 @@ const Dashboard = () => {
                     nameKey="status"
                     cx="50%"
                     cy="50%"
-                    innerRadius={45}
+                    innerRadius={48}
                     outerRadius={75}
                     paddingAngle={4}
                   >
@@ -255,21 +211,21 @@ const Dashboard = () => {
                     ))}
                   </Pie>
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#F5CBCB', borderRadius: '12px', color: '#332F35' }}
+                    contentStyle={{ backgroundColor: '#00264D', borderColor: '#001D3D', borderRadius: '12px', color: '#FFFFFF' }}
                   />
                 </PieChart>
               </ResponsiveContainer>
             </div>
           </div>
 
-          <div className="space-y-2 pt-2 border-t border-[#FFE2E2] text-xs">
+          <div className="space-y-2 pt-2 border-t border-slate-100 text-xs">
             {passVsFail.map((item, idx) => (
               <div key={idx} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="h-3 w-3 rounded-full" style={{ backgroundColor: item.color }}></span>
-                  <span className="font-bold text-[#332F35]">{item.status}</span>
+                  <span className="font-semibold text-slate-700">{item.status}</span>
                 </div>
-                <span className="font-extrabold text-[#332F35]">{item.count} Students</span>
+                <span className="font-bold text-slate-900">{item.count} Students</span>
               </div>
             ))}
           </div>
@@ -278,65 +234,83 @@ const Dashboard = () => {
 
       {/* SECOND ROW CHARTS & LISTS */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Grade Distribution Bar Chart (#C5B3D3 secondary chart fill) */}
-        <div className="bg-white p-6 rounded-2xl border border-[#F5CBCB] shadow-xs space-y-4">
-          <h3 className="font-heading font-extrabold text-base text-[#332F35]">
-            Grade Distribution (A+ to F)
-          </h3>
+        {/* Grade Distribution Bar Chart */}
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+          <div>
+            <h3 className="font-heading font-bold text-base text-slate-900">
+              Grade Distribution (A+ to F)
+            </h3>
+            <p className="text-xs text-slate-500 font-medium">Students per grade tier</p>
+          </div>
           <div className="h-48 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={gradeDistribution}>
-                <XAxis dataKey="grade" tick={{ fill: '#332F35', fontSize: 11, fontWeight: 700 }} />
-                <YAxis allowDecimals={false} tick={{ fill: '#625B64', fontSize: 11 }} />
-                <Tooltip contentStyle={{ backgroundColor: '#FFFFFF', borderRadius: '12px', color: '#332F35' }} />
-                <Bar dataKey="count" fill="#C5B3D3" radius={[6, 6, 0, 0]} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F1F5F9" />
+                <XAxis dataKey="grade" tick={{ fill: '#475569', fontSize: 11, fontWeight: 600 }} axisLine={false} />
+                <YAxis allowDecimals={false} tick={{ fill: '#64748B', fontSize: 11 }} axisLine={false} />
+                <Tooltip contentStyle={{ backgroundColor: '#00264D', borderRadius: '12px', color: '#FFFFFF' }} />
+                <Bar dataKey="count" fill="#FF7F00" radius={[6, 6, 0, 0]} barSize={24} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Top Performers List */}
-        <div className="bg-white p-6 rounded-2xl border border-[#F5CBCB] shadow-xs space-y-4">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-heading font-extrabold text-base text-[#332F35] flex items-center gap-2">
-              <Award className="h-4 w-4 text-[#F5CBCB]" />
+            <h3 className="font-heading font-bold text-base text-slate-900 flex items-center gap-2">
+              <Award className="h-4 w-4 text-[#FF7F00]" />
               <span>Top Performers</span>
             </h3>
-            <span className="text-[10px] font-extrabold text-[#625B64] uppercase">Ranked by %</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase">Ranked by %</span>
           </div>
 
           <div className="space-y-2.5">
             {topPerformers.slice(0, 4).map((p, idx) => (
               <div
                 key={idx}
-                className="flex items-center justify-between p-2.5 rounded-xl bg-[#FFE2E2]/60 border border-[#F5CBCB]"
+                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200"
               >
                 <div className="flex items-center gap-3">
-                  <span className="h-6 w-6 rounded-full bg-[#F5CBCB] text-[#332F35] font-extrabold text-xs flex items-center justify-center">
+                  <span className="h-6 w-6 rounded-full bg-[#00264D] text-white font-bold text-xs flex items-center justify-center shadow-xs">
                     #{idx + 1}
                   </span>
                   <div>
-                    <p className="text-xs font-extrabold text-[#332F35]">{p.studentName}</p>
-                    <p className="text-[10px] text-[#625B64] font-medium">Roll: {p.rollNumber} • {p.class}</p>
+                    <p className="text-xs font-bold text-slate-900">{p.studentName}</p>
+                    <p className="text-[10px] text-slate-500 font-medium">Roll: {p.rollNumber} • {p.class}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-xs font-extrabold text-[#332F35]">{p.percentage}%</span>
-                  <span className="block text-[10px] font-bold text-[#625B64]">{p.grade}</span>
+                  <span className="text-xs font-extrabold text-[#00264D]">{p.percentage}%</span>
+                  <span className="block text-[10px] font-bold text-[#FF7F00]">{p.grade}</span>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Students Needing Improvement (#C5B3D3 AI Card surface) */}
-        <div className="bg-[#C5B3D3] p-6 rounded-2xl border border-white shadow-xs space-y-4 text-[#332F35]">
+        {/* Students Needing Improvement */}
+        <div
+          onClick={() => navigate('/needing-support')}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              navigate('/needing-support');
+            }
+          }}
+          className="bg-white p-6 rounded-2xl border border-orange-200 shadow-xs space-y-4 text-slate-900 cursor-pointer hover:border-[#FF7F00] hover:ring-2 hover:ring-[#FF7F00]/20 hover:shadow-md transition-all group"
+        >
           <div className="flex items-center justify-between">
-            <h3 className="font-heading font-extrabold text-base text-[#332F35] flex items-center gap-2">
-              <AlertCircle className="h-4 w-4 text-[#332F35]" />
+            <h3 className="font-heading font-bold text-base text-slate-900 flex items-center gap-2 group-hover:text-[#FF7F00] transition-colors">
+              <AlertCircle className="h-4 w-4 text-[#FF7F00]" />
               <span>Needing Support</span>
             </h3>
-            <span className="text-[10px] font-extrabold text-[#332F35] uppercase bg-[#FFFFFF] px-2 py-0.5 rounded">AI Action</span>
+            <span className="text-[10px] font-bold text-[#FF7F00] uppercase bg-[#FFF7ED] group-hover:bg-[#FF7F00] group-hover:text-white px-2 py-0.5 rounded border border-[#FED7AA] transition-colors flex items-center gap-1">
+              <span>View Overview</span>
+              <ArrowRight className="h-3 w-3" />
+            </span>
           </div>
 
           <div className="space-y-2.5">
@@ -344,47 +318,42 @@ const Dashboard = () => {
               needingImprovementList.map((s, idx) => (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-[#F5CBCB]"
+                  className="flex items-center justify-between p-2.5 rounded-xl bg-[#FFF7ED]/50 border border-orange-200"
                 >
                   <div>
-                    <p className="text-xs font-extrabold text-[#332F35]">{s.studentName}</p>
-                    <p className="text-[10px] text-[#625B64] font-medium">Roll: {s.rollNumber} • {s.class}</p>
+                    <p className="text-xs font-bold text-slate-900">{s.studentName}</p>
+                    <p className="text-[10px] text-slate-500 font-medium">Roll: {s.rollNumber} • {s.class}</p>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs font-extrabold text-[#332F35]">{s.percentage}%</span>
-                    <button
-                      onClick={() => navigate('/result-analysis')}
-                      className="block text-[10px] font-extrabold text-[#332F35] hover:underline mt-0.5"
-                    >
-                      AI Plan →
-                    </button>
+                    <span className="text-xs font-bold text-rose-600">{s.percentage}%</span>
+                    <span className="block text-[10px] font-semibold text-slate-500">Below 33%</span>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="text-xs text-[#332F35] text-center py-6 font-semibold">All students currently meeting academic threshold!</p>
+              <p className="text-xs text-slate-500 text-center py-6 font-medium">All students currently meeting academic threshold!</p>
             )}
           </div>
         </div>
       </div>
 
       {/* RECENT RESULTS TABLE */}
-      <div className="bg-white rounded-2xl border border-[#F5CBCB] shadow-xs overflow-hidden">
-        <div className="p-6 border-b border-[#FFE2E2] flex items-center justify-between">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
           <div>
-            <h3 className="font-heading font-extrabold text-lg text-[#332F35]">
+            <h3 className="font-heading font-bold text-lg text-slate-900">
               Recent Student Report Cards
             </h3>
-            <p className="text-xs text-[#625B64] font-medium">
+            <p className="text-xs text-slate-500 font-medium">
               Latest generated report cards in AnkSetu System
             </p>
           </div>
 
           <button
             onClick={() => navigate('/results')}
-            className="flex items-center gap-1 text-xs font-extrabold text-[#332F35] hover:text-[#625B64]"
+            className="flex items-center gap-1.5 text-xs font-bold text-[#00264D] hover:text-[#FF7F00] transition-colors"
           >
-            <span>View All History</span>
+            <span>View All Results</span>
             <ArrowRight className="h-3.5 w-3.5" />
           </button>
         </div>
@@ -392,7 +361,7 @@ const Dashboard = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-[#FFE2E2] text-[#332F35] font-extrabold uppercase tracking-wider text-[10px]">
+              <tr className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
                 <th className="p-4">Student Name</th>
                 <th className="p-4">Roll Number</th>
                 <th className="p-4">Class</th>
@@ -403,30 +372,30 @@ const Dashboard = () => {
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#FFE2E2]">
+            <tbody className="divide-y divide-slate-100">
               {recentResults.map((r) => (
-                <tr key={r.id} className="hover:bg-[#FBEFEF] transition-colors">
-                  <td className="p-4 font-bold text-[#332F35]">{r.studentName}</td>
-                  <td className="p-4 text-[#625B64] font-medium">{r.rollNumber}</td>
-                  <td className="p-4 text-[#625B64] font-medium">{r.class}</td>
-                  <td className="p-4 text-center font-extrabold text-[#332F35]">{r.percentage}%</td>
-                  <td className="p-4 text-center font-bold text-[#332F35]">{r.grade}</td>
+                <tr key={r.id} className="hover:bg-slate-50/80 transition-colors">
+                  <td className="p-4 font-bold text-slate-900">{r.studentName}</td>
+                  <td className="p-4 text-slate-600 font-medium">{r.rollNumber}</td>
+                  <td className="p-4 text-slate-600 font-medium">{r.class}</td>
+                  <td className="p-4 text-center font-extrabold text-[#00264D]">{r.percentage}%</td>
+                  <td className="p-4 text-center font-bold text-slate-800">{r.grade}</td>
                   <td className="p-4 text-center">
                     <span
-                      className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase ${
+                      className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${
                         r.resultStatus === 'PASS'
-                          ? 'bg-[#F5CBCB] text-[#332F35]'
-                          : 'bg-[#FFE2E2] text-[#332F35] border border-[#F5CBCB]'
+                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                          : 'bg-rose-50 text-rose-700 border border-rose-200'
                       }`}
                     >
                       {r.resultStatus}
                     </span>
                   </td>
-                  <td className="p-4 text-[#625B64] font-medium">{r.generatedDate}</td>
+                  <td className="p-4 text-slate-500 font-medium">{r.generatedDate}</td>
                   <td className="p-4 text-right">
                     <button
                       onClick={() => navigate(`/results/${r.id}`)}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#F5CBCB] hover:bg-[#C5B3D3] text-[#332F35] text-xs font-extrabold transition-colors shadow-2xs"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#00264D] hover:bg-[#FF7F00] text-white text-xs font-bold transition-all shadow-xs"
                     >
                       <Eye className="h-3.5 w-3.5" />
                       <span>View Result</span>

@@ -1,6 +1,6 @@
 import Student from '../models/Student.js';
 import Result from '../models/Result.js';
-import { initialStudents } from '../utils/seedData.js';
+import { initialStudents, initialResults } from '../utils/seedData.js';
 import { isDbConnected, shouldUseFallback } from '../config/db.js';
 
 let inMemoryStudents = [...initialStudents];
@@ -73,6 +73,11 @@ export const getStudentById = async (req, res) => {
       }
     } else if (shouldUseFallback()) {
       student = inMemoryStudents.find((s) => s.studentId === id || s._id === id);
+      if (student) {
+        results = initialResults.filter(
+          (r) => r.studentId === student.studentId || r.studentId === student._id
+        );
+      }
     } else {
       return res.status(503).json({
         success: false,

@@ -17,6 +17,7 @@ import ResultView from './pages/ResultView';
 import Analytics from './pages/Analytics';
 import Subjects from './pages/Subjects';
 import Settings from './pages/Settings';
+import NeedingSupport from './pages/NeedingSupport';
 
 const ProtectedLayout = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -92,6 +93,9 @@ function AppRoutes() {
           </ProtectedLayout>
         }
       />
+      <Route path="/result" element={<Navigate to="/results" replace />} />
+      <Route path="/result-history" element={<Navigate to="/results" replace />} />
+      <Route path="/results-history" element={<Navigate to="/results" replace />} />
       <Route
         path="/results/:id"
         element={
@@ -116,6 +120,15 @@ function AppRoutes() {
           </ProtectedLayout>
         }
       />
+      <Route
+        path="/needing-support"
+        element={
+          <ProtectedLayout>
+            <NeedingSupport />
+          </ProtectedLayout>
+        }
+      />
+      <Route path="/support-overview" element={<Navigate to="/needing-support" replace />} />
       <Route
         path="/settings"
         element={
