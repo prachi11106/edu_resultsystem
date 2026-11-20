@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --color-background: #F8FAFC;
@@ -16,11 +18,28 @@
     --color-border: #E2E8F0;
   }
 
+  .dark {
+    --color-background: #090E1A;
+    --color-surface: #0F172A;
+    --color-secondary-surface: #1E293B;
+    --color-primary: #00264D;
+    --color-primary-hover: #001D3D;
+    --color-accent: #FF7F00;
+    --color-accent-hover: #E06D00;
+    --color-accent-light: #1C1917;
+    --color-navy-light: #1E293B;
+    --color-text: #F8FAFC;
+    --color-muted: #94A3B8;
+    --color-border: #334155;
+  }
+
   body {
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #F8FAFC;
-    color: #0F172A;
+    background-color: var(--color-background);
+    color: var(--color-text);
     -webkit-font-smoothing: antialiased;
+    font-size: 0.8125rem;
+    /* Slightly refined base font size for modern SaaS dashboard */
   }
 }
 
@@ -137,6 +156,17 @@
   border-color: #CBD5E1;
 }
 
+.dark .btn-secondary {
+  background-color: #1E293B;
+  color: #F8FAFC;
+  border-color: #334155;
+}
+
+.dark .btn-secondary:hover {
+  background-color: #334155;
+  border-color: #475569;
+}
+
 /* Form inputs styling */
 .input-pastel {
   background-color: #FFFFFF;
@@ -148,6 +178,12 @@
   transition: all 0.2s ease;
 }
 
+.dark .input-pastel {
+  background-color: #0F172A;
+  border-color: #334155;
+  color: #F8FAFC;
+}
+
 .input-pastel::placeholder {
   color: #94A3B8;
 }
@@ -157,6 +193,10 @@
   outline: none;
   box-shadow: 0 0 0 3px rgba(255, 127, 0, 0.15);
   background-color: #FFFFFF;
+}
+
+.dark .input-pastel:focus {
+  background-color: #0F172A;
 }
 
 /* Print Styles for A4 Result Sheet */

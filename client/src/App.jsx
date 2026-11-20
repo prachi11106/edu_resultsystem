@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { InstituteProvider } from './context/InstituteContext';
 
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
@@ -19,12 +20,27 @@ import Subjects from './pages/Subjects';
 import Settings from './pages/Settings';
 import NeedingSupport from './pages/NeedingSupport';
 
-const ProtectedLayout = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+const ProtectedLayout = ({ children, requiredRole }) => {
+  const { isAuthenticated, initializing, user } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  if (initializing) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-10 w-10 border-4 border-[#00264D] border-t-[#FF7F00] rounded-full animate-spin"></div>
+          <p className="text-xs font-bold text-slate-600">Verifying AnkSetu session...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (requiredRole && user?.role !== requiredRole) {
+    return <Navigate to="/dashboard" replace />;
   }
 
   return (
@@ -41,10 +57,25 @@ const ProtectedLayout = ({ children }) => {
 };
 
 function AppRoutes() {
+  const { isAuthenticated } = useAuth();
+
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
+      {/* Authentication Pages */}
+      <Route
+        path="/login"
+        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login initialMode="login" />}
+      />
+      <Route
+        path="/signup"
+        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login initialMode="signup" />}
+      />
+      <Route
+        path="/forgot-password"
+        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login initialMode="forgot" />}
+      />
 
+      {/* Protected Dashboard & App Routes */}
       <Route
         path="/dashboard"
         element={
@@ -147,9 +178,11 @@ export default function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <Router>
-          <AppRoutes />
-        </Router>
+        <InstituteProvider>
+          <Router>
+            <AppRoutes />
+          </Router>
+        </InstituteProvider>
       </AuthProvider>
     </ThemeProvider>
   );

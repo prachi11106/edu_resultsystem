@@ -133,29 +133,80 @@ const MarksEntry = () => {
     return null;
   };
 
-  const handleProceedToAnalysis = () => {
+
+  const handleProceedToAnalysis = async () => {
     setErrorMsg('');
+
     const valErr = validateInputs();
+
     if (valErr) {
       setErrorMsg(valErr);
       return;
     }
 
-    const currentStudent = students.find((s) => s.studentId === selectedStudentId || s._id === selectedStudentId);
+    if (!selectedStudentId) {
+      setErrorMsg('Please select a student first.');
+      return;
+    }
 
-    navigate('/result-analysis', {
-      state: {
-        studentId: selectedStudentId,
-        studentName: currentStudent?.name || 'Selected Student',
-        rollNumber: currentStudent?.rollNumber || '1001',
+    const currentStudent = students.find(
+      (s) =>
+        s.studentId === selectedStudentId ||
+        s._id === selectedStudentId
+    );
+
+    if (!currentStudent) {
+      setErrorMsg('Selected student was not found.');
+      return;
+    }
+
+    setSaving(true);
+
+    try {
+      const payload = {
+        studentId: currentStudent.studentId || currentStudent._id,
+        session,
         class: className,
         section,
-        session,
         subjects: processedSubjects,
-        teacherRemark,
-      },
-    });
+        teacherRemark
+      };
+
+      // Save the calculated result in MongoDB
+      const res = await resultAPI.create(payload);
+
+      if (!res.success || !res.data) {
+        throw new Error(
+          res.message || 'Failed to save result in database.'
+        );
+      }
+
+      // Navigate only after successful saving
+      navigate('/result-analysis', {
+        state: {
+          studentId: currentStudent.studentId || currentStudent._id,
+          studentName: currentStudent.name,
+          rollNumber: currentStudent.rollNumber,
+          class: className,
+          section,
+          session,
+          subjects: res.data.subjects,
+          resultId: res.data.resultId,
+          teacherRemark: res.data.teacherRemark,
+          savedResult: res.data
+        }
+      });
+
+    } catch (err) {
+      console.error('[Result Save Error]', err);
+      setErrorMsg(
+        err.message || 'Failed to calculate and save result.'
+      );
+    } finally {
+      setSaving(false);
+    }
   };
+
 
   const handleDirectSave = async () => {
     setErrorMsg('');
@@ -205,10 +256,13 @@ const MarksEntry = () => {
 
         <button
           onClick={handleProceedToAnalysis}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#00264D] hover:bg-[#FF7F00] text-white font-bold text-xs shadow-md shadow-[#00264D]/15 transition-all"
+          disabled={saving}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#00264D] hover:bg-[#FF7F00] text-white font-bold text-xs shadow-md shadow-[#00264D]/15 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
         >
           <Sparkles className="h-4 w-4 text-[#FF7F00]" />
-          <span>Analyze & Generate Result →</span>
+          <span>
+            {saving ? 'Saving Result...' : 'Analyze & Generate Result →'}
+          </span>
         </button>
       </div>
 
@@ -352,11 +406,10 @@ const MarksEntry = () => {
                   </td>
                   <td className="p-3 text-center">
                     <span
-                      className={`inline-block px-2.5 py-0.5 rounded text-[10px] font-bold uppercase ${
-                        sub.status === 'PASS'
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                          : 'bg-rose-50 text-rose-700 border border-rose-200'
-                      }`}
+                      className={`inline-block px-2.5 py-0.5 rounded text-[10px] font-bold uppercase ${sub.status === 'PASS'
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                        : 'bg-rose-50 text-rose-700 border border-rose-200'
+                        }`}
                     >
                       {sub.status}
                     </span>
@@ -416,9 +469,8 @@ const MarksEntry = () => {
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <span className="font-bold text-[#FF7F00]">{overallGrade}</span>
                   <span
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                      resultStatus === 'PASS' ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'
-                    }`}
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold ${resultStatus === 'PASS' ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'
+                      }`}
                   >
                     {resultStatus}
                   </span>

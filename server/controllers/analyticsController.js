@@ -1,6 +1,8 @@
 import Result from '../models/Result.js';
 import Student from '../models/Student.js';
-import { initialResults, initialStudents } from '../utils/seedData.js';
+import { isDbConnected, shouldUseFallback } from '../config/db.js';
+import { getInMemoryStudents } from './studentController.js';
+import { getInMemoryResults } from './resultController.js';
 
 // @desc Get main Dashboard KPIs and chart analytics
 // @route GET /api/analytics/dashboard
@@ -9,34 +11,39 @@ export const getDashboardAnalytics = async (req, res) => {
     let students = [];
     let results = [];
 
-    try {
-      students = await Student.find();
-      results = await Result.find().sort({ generatedAt: -1 });
-    } catch {
-      students = initialStudents;
-      results = initialResults;
+    if (isDbConnected()) {
+      try {
+        students = await Student.find();
+        results = await Result.find().sort({ generatedAt: -1 });
+      } catch (err) {
+        console.warn('[getDashboardAnalytics DB error]', err.message);
+        students = getInMemoryStudents();
+        results = getInMemoryResults();
+      }
+    } else if (shouldUseFallback()) {
+      students = getInMemoryStudents();
+      results = getInMemoryResults();
     }
 
-    if (!students || students.length === 0) students = initialStudents;
-    if (!results || results.length === 0) results = initialResults;
-
-    const totalStudents = students.length;
-    const totalResultsGenerated = results.length;
+    const totalStudents = students ? students.length : 0;
+    const totalResultsGenerated = results ? results.length : 0;
 
     // Calculate Average Percentage
     const avgPercentage =
-      results.length > 0
-        ? Number((results.reduce((acc, r) => acc + (r.percentage || 0), 0) / results.length).toFixed(1))
+      totalResultsGenerated > 0
+        ? Number((results.reduce((acc, r) => acc + (r.percentage || 0), 0) / totalResultsGenerated).toFixed(1))
         : 0;
 
     // Calculate Pass Percentage
-    const passCount = results.filter((r) => r.resultStatus === 'PASS').length;
-    const failCount = results.length - passCount;
+    const passCount = (results || []).filter((r) => r.resultStatus === 'PASS').length;
+    const failCount = totalResultsGenerated - passCount;
     const passPercentage =
-      results.length > 0 ? Number(((passCount / results.length) * 100).toFixed(1)) : 0;
+      totalResultsGenerated > 0
+        ? Number(((passCount / totalResultsGenerated) * 100).toFixed(1))
+        : 0;
 
     // Students needing improvement (percentage < 60 or Status === FAIL)
-    const needingImprovementList = results
+    const needingImprovementList = (results || [])
       .filter((r) => r.percentage < 60 || r.resultStatus === 'FAIL')
       .map((r) => ({
         studentId: r.studentId,
@@ -51,7 +58,7 @@ export const getDashboardAnalytics = async (req, res) => {
       }));
 
     // Top Performing Students
-    const topPerformers = [...results]
+    const topPerformers = [...(results || [])]
       .sort((a, b) => b.percentage - a.percentage)
       .slice(0, 5)
       .map((r) => ({
@@ -66,7 +73,7 @@ export const getDashboardAnalytics = async (req, res) => {
     // Subject-wise average percentage calculation across all results
     const subjectTotals = {};
     const subjectCounts = {};
-    results.forEach((r) => {
+    (results || []).forEach((r) => {
       (r.subjects || []).forEach((sub) => {
         const name = sub.subjectName;
         if (!subjectTotals[name]) {
@@ -85,7 +92,7 @@ export const getDashboardAnalytics = async (req, res) => {
 
     // Grade Distribution count
     const gradeCounts = { 'A+': 0, A: 0, 'B+': 0, B: 0, C: 0, D: 0, F: 0 };
-    results.forEach((r) => {
+    (results || []).forEach((r) => {
       const g = r.grade || 'F';
       if (gradeCounts[g] !== undefined) {
         gradeCounts[g] += 1;
@@ -106,7 +113,7 @@ export const getDashboardAnalytics = async (req, res) => {
     ];
 
     // Recent 5 results table
-    const recentResults = results.slice(0, 7).map((r) => ({
+    const recentResults = (results || []).slice(0, 7).map((r) => ({
       id: r._id || r.resultId,
       resultId: r.resultId,
       studentName: r.studentDetails?.name || 'Student',
@@ -115,7 +122,7 @@ export const getDashboardAnalytics = async (req, res) => {
       percentage: r.percentage,
       grade: r.grade,
       resultStatus: r.resultStatus,
-      generatedDate: new Date(r.generatedAt || r.createdAt).toLocaleDateString('en-US', {
+      generatedDate: new Date(r.generatedAt || r.createdAt || Date.now()).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
         year: 'numeric',
@@ -151,19 +158,18 @@ export const getDashboardAnalytics = async (req, res) => {
 export const getComparativeAnalytics = async (req, res) => {
   try {
     let results = [];
-    try {
+    if (isDbConnected()) {
       results = await Result.find();
-    } catch {
-      results = initialResults;
+    } else if (shouldUseFallback()) {
+      results = getInMemoryResults();
     }
-    if (!results || results.length === 0) results = initialResults;
 
     // Class average comparison
     const classMap = {};
-    results.forEach((r) => {
+    (results || []).forEach((r) => {
       const cls = r.class || 'Class 10';
       if (!classMap[cls]) classMap[cls] = { totalPct: 0, count: 0, passCount: 0 };
-      classMap[cls].totalPct += r.percentage;
+      classMap[cls].totalPct += r.percentage || 0;
       classMap[cls].count += 1;
       if (r.resultStatus === 'PASS') classMap[cls].passCount += 1;
     });

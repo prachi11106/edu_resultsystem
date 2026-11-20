@@ -9,15 +9,17 @@ import {
   Calendar,
 } from 'lucide-react';
 import { printResultCard, downloadResultPDF } from '../services/pdfService';
+import { useInstitute } from '../context/InstituteContext';
 
 const ReportCard = ({ result, schoolInfo }) => {
   if (!result) return null;
 
-  const schoolName = schoolInfo?.schoolName || 'Delhi Public International Academy';
-  const schoolAddress = schoolInfo?.schoolAddress || 'Knowledge Park III, Institutional Area, Greater Noida, UP - 201308';
-  const schoolPhone = schoolInfo?.schoolPhone || '+91 120 4567 890';
-  const schoolEmail = schoolInfo?.schoolEmail || 'info@dpia.edu.in';
-  const logoUrl = schoolInfo?.schoolLogo || 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=150&h=150&fit=crop&crop=faces';
+  const { instituteName, settings: contextSettings } = useInstitute();
+  const schoolName = instituteName || schoolInfo?.schoolName || contextSettings?.schoolName || 'Delhi Public International Academy';
+  const schoolAddress = schoolInfo?.schoolAddress || contextSettings?.schoolAddress || 'Knowledge Park III, Institutional Area, Greater Noida, UP - 201308';
+  const schoolPhone = schoolInfo?.schoolPhone || contextSettings?.schoolPhone || '+91 120 4567 890';
+  const schoolEmail = schoolInfo?.schoolEmail || contextSettings?.schoolEmail || 'info@dpia.edu.in';
+  const logoUrl = schoolInfo?.schoolLogo || contextSettings?.schoolLogo || 'https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=150&h=150&fit=crop&crop=faces';
 
   const student = result.studentDetails || {};
   const isPass = result.resultStatus === 'PASS';
@@ -328,7 +330,7 @@ const ReportCard = ({ result, schoolInfo }) => {
           </div>
           <div className="border-t-2 border-slate-300 pt-2">
             <span className="font-bold text-slate-900 block">Principal Signature</span>
-            <span className="text-[10px] text-slate-500 font-medium">Delhi Public Int. Academy</span>
+            <span className="text-[10px] text-slate-500 font-medium truncate block">{schoolName}</span>
           </div>
           <div className="border-t-2 border-slate-300 pt-2">
             <span className="font-bold text-slate-900 block">Parent / Guardian Signature</span>

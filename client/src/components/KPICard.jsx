@@ -3,28 +3,28 @@ import React from 'react';
 const KPICard = ({ title, value, subtitle, icon: Icon, trend, variant = 'surface', onClick }) => {
   const variantMap = {
     surface: {
-      bg: 'bg-white',
-      border: 'border-slate-200',
-      iconBg: 'bg-[#00264D]/10 text-[#00264D]',
-      textPrimary: 'text-slate-900',
+      bg: 'bg-white dark:bg-slate-900',
+      border: 'border-slate-200 dark:border-slate-800',
+      iconBg: 'bg-[#00264D]/10 dark:bg-white/10 text-[#00264D] dark:text-[#FF7F00]',
+      textPrimary: 'text-slate-900 dark:text-white',
     },
     positive: {
-      bg: 'bg-white',
-      border: 'border-emerald-200',
-      iconBg: 'bg-emerald-50 text-emerald-600',
-      textPrimary: 'text-slate-900',
+      bg: 'bg-white dark:bg-slate-900',
+      border: 'border-emerald-200 dark:border-emerald-900/40',
+      iconBg: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400',
+      textPrimary: 'text-slate-900 dark:text-white',
     },
     analytics: {
-      bg: 'bg-white',
-      border: 'border-slate-200',
+      bg: 'bg-white dark:bg-slate-900',
+      border: 'border-slate-200 dark:border-slate-800',
       iconBg: 'bg-[#00264D] text-white',
-      textPrimary: 'text-[#00264D]',
+      textPrimary: 'text-[#00264D] dark:text-[#FF7F00]',
     },
     ai: {
-      bg: 'bg-white',
-      border: 'border-orange-200',
-      iconBg: 'bg-[#FF7F00]/15 text-[#FF7F00]',
-      textPrimary: 'text-slate-900',
+      bg: 'bg-white dark:bg-slate-900',
+      border: 'border-orange-200 dark:border-orange-900/40',
+      iconBg: 'bg-[#FF7F00]/15 dark:bg-[#FF7F00]/20 text-[#FF7F00]',
+      textPrimary: 'text-slate-900 dark:text-white',
     },
   };
 
@@ -46,25 +46,25 @@ const KPICard = ({ title, value, subtitle, icon: Icon, trend, variant = 'surface
       }`}
     >
       <div className="flex items-center justify-between">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
           {title}
         </span>
         <div className={`p-2.5 rounded-xl ${scheme.iconBg} shadow-2xs`}>
-          <Icon className="h-5 w-5" />
+          <Icon className="h-4 w-4" />
         </div>
       </div>
 
-      <div className="mt-4 flex items-baseline justify-between">
-        <h3 className={`font-heading font-extrabold text-3xl ${scheme.textPrimary}`}>
+      <div className="mt-3 flex items-baseline justify-between">
+        <h3 className={`font-heading font-extrabold text-2xl sm:text-3xl ${scheme.textPrimary}`}>
           {value}
         </h3>
 
         {trend && (
           <span
-            className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full ${
+            className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${
               trend.isPositive
-                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                : 'bg-amber-50 text-amber-800 border border-amber-200'
+                ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
+                : 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-400 border border-amber-200 dark:border-amber-800'
             }`}
           >
             {trend.isPositive ? '↑' : '↓'} {trend.text}
@@ -73,7 +73,7 @@ const KPICard = ({ title, value, subtitle, icon: Icon, trend, variant = 'surface
       </div>
 
       {subtitle && (
-        <p className="mt-1.5 text-xs text-slate-500 font-medium">
+        <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
           {subtitle}
         </p>
       )}

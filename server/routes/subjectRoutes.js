@@ -15,5 +15,4 @@ router.route('/')
 router.route('/:id')
   .put(updateSubject)
   .delete(deleteSubject);
-
 export default router;

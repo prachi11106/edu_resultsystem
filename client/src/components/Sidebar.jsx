@@ -13,9 +13,11 @@ import {
   FileCheck2,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useInstitute } from '../context/InstituteContext';
 
 const Sidebar = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth();
+  const { instituteName } = useInstitute();
   const location = useLocation();
 
   const navItems = [
@@ -115,8 +117,11 @@ const Sidebar = ({ isOpen, onClose }) => {
           })}
         </nav>
 
-        {/* Footer Sign Out */}
-        <div className="p-3 border-t border-white/10 bg-[#001D3D]">
+        {/* Footer Sign Out & Institute Name */}
+        <div className="p-3 border-t border-white/10 bg-[#001D3D] space-y-2">
+          <p className="text-[10px] text-slate-400 truncate px-1 text-center font-medium" title={instituteName}>
+            {instituteName}
+          </p>
           <button
             onClick={logout}
             className="w-full flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-bold text-white bg-white/10 hover:bg-[#FF7F00] transition-all shadow-xs"

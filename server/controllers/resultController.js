@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Result from '../models/Result.js';
 import Student from '../models/Student.js';
 import Settings from '../models/Settings.js';
@@ -7,6 +8,8 @@ import { initialResults } from '../utils/seedData.js';
 import { isDbConnected, shouldUseFallback } from '../config/db.js';
 
 let inMemoryResults = [...initialResults];
+
+export const getInMemoryResults = () => inMemoryResults;
 
 // @desc Get all results with search, filter, and sort
 // @route GET /api/results
@@ -177,10 +180,29 @@ export const createResult = async (req, res) => {
     }
 
     // Load student metadata
+
+    // Load student metadata
     let student = null;
+
     if (isDbConnected()) {
-      student = await Student.findOne({ $or: [{ _id: studentId }, { studentId }] });
+      // Search using the custom student ID first
+      student = await Student.findOne({
+        studentId: studentId
+      });
+
+      // If not found, check whether the ID is a valid MongoDB ObjectId
+      if (!student && mongoose.isValidObjectId(studentId)) {
+        student = await Student.findById(studentId);
+      }
     }
+
+    if (!student) {
+      return res.status(404).json({
+        success: false,
+        message: `Student not found: ${studentId}`
+      });
+    }
+
 
     const studentDetails = {
       name: student?.name || req.body.studentName || 'Student',

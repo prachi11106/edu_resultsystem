@@ -5,6 +5,8 @@ import { isDbConnected, shouldUseFallback } from '../config/db.js';
 
 let inMemoryStudents = [...initialStudents];
 
+export const getInMemoryStudents = () => inMemoryStudents;
+
 // @desc Get all students
 // @route GET /api/students
 export const getStudents = async (req, res) => {
